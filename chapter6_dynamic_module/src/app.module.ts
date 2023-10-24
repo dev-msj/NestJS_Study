@@ -22,9 +22,9 @@ import { validationSchema } from './config/validationSchema';
        */
       // envFilePath: process.env.NODE_ENV === 'production' ? '.production.env' : process.env.NODE_ENV === 'stage' ? '.stage.env' : '.development.env',
       envFilePath: [`${__dirname}/config/env/.${process.env.NODE_ENV}.env`],
-      load: [emailConfig],
-      isGlobal: true,
-      validationSchema,
+      load: [emailConfig], // ConfigFactory를 지정
+      isGlobal: true, // 전역 모듈로 선언
+      validationSchema, // 유효성 검사를 위한 검사 객체 지정
     }),
     UsersModule,
   ],
