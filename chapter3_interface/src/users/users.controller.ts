@@ -38,6 +38,7 @@ export class UsersController {
     return;
   }
 
+  // 경로명 앞에 ':'를 붙여 라우트 매개변수로 지정할 수 있다.
   @Get('/:id')
   async getUserInfo(@Param('id') id: string): Promise<UserInfo> {
     // Param 데코레이터로 라우트 매개변수를 가져올 수 있다.
