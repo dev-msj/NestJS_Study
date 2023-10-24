@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { SampleAService } from './sample-A.service';
 
-// Injectable 데코레이션을 통해 의존성 주입(DI)이 가능하도록 만든다.
+// Injectable 데코레이터을 통해 의존성 주입(DI)이 가능하도록 만든다.
 @Injectable()
 export class BaseService {
   /**
