@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 
 @Controller()
 export class AppController {
-  @Inject(ConfigService) private readonly configService: ConfigService;
+  constructor(private readonly configService: ConfigService) {}
 
   @Get('/db-host-from-config')
   getDBHostFromConfigService(): string {

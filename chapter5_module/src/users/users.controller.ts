@@ -15,7 +15,7 @@ import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
-  @Inject(UsersService) private readonly usersService: UsersService;
+  constructor(private readonly usersService: UsersService) {}
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto): Promise<void> {

@@ -7,7 +7,7 @@ import { UserInfo } from './user-info.interface';
 
 @Injectable()
 export class UsersService {
-  @Inject(EmailService) private readonly emailService: EmailService;
+  constructor(private readonly emailService: EmailService) {}
 
   async create(createUserDto: CreateUserDto) {
     await this.checkUserExists(createUserDto.email);
