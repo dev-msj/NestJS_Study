@@ -1,13 +1,17 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { ConfigService } from './config/config.service';
 import * as fs from 'fs';
+import { logger3 } from './logger/logger3.middleware';
+import { OrmConfigService } from './config/orm-config.service';
 
 async function bootstrap() {
   await makeOrmConfig();
 
   const app = await NestFactory.create(AppModule);
+
+  // looger3 middleware를 전역으로 설정
+  app.use(logger3);
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -18,7 +22,7 @@ async function bootstrap() {
 }
 
 async function makeOrmConfig() {
-  const configService = new ConfigService(process.env);
+  const configService = new OrmConfigService(process.env);
   const typeOrmConfig = configService.getTypeOrmConfig();
 
   if (fs.existsSync('ormconfig.json')) {

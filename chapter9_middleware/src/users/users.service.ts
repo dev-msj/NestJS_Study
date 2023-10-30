@@ -13,7 +13,8 @@ import { ulid } from 'ulid';
 export class UsersService {
   constructor(
     private readonly emailService: EmailService,
-    @InjectRepository(UserEntity) private userRepository: Repository<UserEntity>,
+    @InjectRepository(UserEntity)
+    private userRepository: Repository<UserEntity>,
     private dataSource: DataSource,
   ) {}
 
@@ -57,7 +58,7 @@ export class UsersService {
 
   private async checkUserExists(email: string) {
     const user = await this.userRepository.findOne({
-      where: { email: email }
+      where: { email: email },
     });
 
     return user !== undefined;
@@ -67,7 +68,9 @@ export class UsersService {
   private async save(createUserDto: CreateUserDto, signupVerifyToken: string) {
     const userExist = await this.checkUserExists(createUserDto.email);
     if (userExist) {
-      throw new UnprocessableEntityException('해당 이메일로는 가입할 수 없습니다.');
+      throw new UnprocessableEntityException(
+        '해당 이메일로는 가입할 수 없습니다.',
+      );
     }
 
     const user = new UserEntity();

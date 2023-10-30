@@ -1,10 +1,19 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { UsersModule } from './users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import emailConfig from './config/emailConfig';
 import { validationSchema } from './config/validationSchema';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { LoggerMiddleware } from './logger/logger.middleware';
+import { Logger2Middleware } from './logger/logger2.middleware';
+import { UsersController } from './users/users.controller';
+import { typeOrmConfig } from './config/typeOrmConfig.service';
 
 @Module({
   imports: [
@@ -14,39 +23,23 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       isGlobal: true,
       validationSchema,
     }),
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: process.env.DB_HOST,
-      port: Number(process.env.DB_PORT),
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_DATABASE,
-      // TypeORM이 자동으로 인식할 entity class 경로
-      entities: [`${__dirname}/**/*.entity{.ts,.js}`],
-      // 서비스 구동 시 소스 코드 기반으로 DB Schema 동기화 여부
-      // true면 서비스가 시작될 때 자동으로 테이블 생성. 미리 만들어 놓으면 Error 남.
-      // synchronize: process.env.DB_SYNCHRONIZE === 'true',
-      synchronize: false,
-
-      // 연결 재시도 횟수. default: 10
-      // retryAttempts: 10,
-
-      // 재시도 간의 지연 시간(ms). default: 3000
-      // retryDelay: 3000,
-
-      // 에러가 났을 때, 인수 err를 받아서 연결을 시도할지 판단하는 함수.
-      // toRetry: (err: any) => false,
-
-      // 엔티티를 자동 로드할지 여부
-      // autoLoadEntities: false,
-
-      //연결을 재시도할 때 verbose 레벨로 에러 메시지를 출력할지 여부.
-      // verbose -> 상세 메시지
-      // verboseRetryLog: false,
-    }),
+    TypeOrmModule.forRootAsync(typeOrmConfig),
     UsersModule,
   ],
   controllers: [AppController],
   providers: [ConfigService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    // middleware를 어디에 적용할지 관리
+    consumer
+      // middleware를 적용할 클래스
+      .apply(LoggerMiddleware, Logger2Middleware)
+      // RouteInfo 객체로 middleware를 적용하지 않을 경로 설정.
+      .exclude({ path: '/users', method: RequestMethod.GET })
+      // 일반적으로 controller 객체를 넘겨서 사용
+      .forRoutes(UsersController);
+    // .forRoutes({ path: '/users', method: RequestMethod.POST }); // RouteInfo
+    // .forRoutes('/users'); // Path
+  }
+}
