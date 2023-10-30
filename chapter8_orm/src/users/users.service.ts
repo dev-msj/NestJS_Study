@@ -13,7 +13,8 @@ import { ulid } from 'ulid';
 export class UsersService {
   constructor(
     private readonly emailService: EmailService,
-    @InjectRepository(UserEntity) private userRepository: Repository<UserEntity>,
+    @InjectRepository(UserEntity)
+    private userRepository: Repository<UserEntity>,
     private dataSource: DataSource,
   ) {}
 
