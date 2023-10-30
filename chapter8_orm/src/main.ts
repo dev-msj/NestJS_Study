@@ -10,7 +10,7 @@ async function bootstrap() {
    * 하지만 현업에서 아직 0.2.x 버전을 사용하고 있는 곳이 있을 수 있다.
    * 그럴 땐 아래와 같이 ConfigService를 만들어 ormconfig.json을 생성해주자.
    */
-  // await makeOrmConfig();
+  await makeOrmConfig();
 
   const app = await NestFactory.create(AppModule);
 
@@ -31,10 +31,7 @@ async function makeOrmConfig() {
     fs.unlinkSync('ormconfig.json');
   }
 
-  fs.writeFileSync(
-    'ormconfig.json',
-    JSON.stringify(typeOrmConfig, null, 2),
-  );
+  fs.writeFileSync('ormconfig.json', JSON.stringify(typeOrmConfig, null, 2));
 }
 
 bootstrap();

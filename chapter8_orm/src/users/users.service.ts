@@ -57,7 +57,7 @@ export class UsersService {
 
   private async checkUserExists(email: string) {
     const user = await this.userRepository.findOne({
-      where: { email: email }
+      where: { email: email },
     });
 
     return user !== undefined;
@@ -67,7 +67,9 @@ export class UsersService {
   private async save(createUserDto: CreateUserDto, signupVerifyToken: string) {
     const userExist = await this.checkUserExists(createUserDto.email);
     if (userExist) {
-      throw new UnprocessableEntityException('해당 이메일로는 가입할 수 없습니다.');
+      throw new UnprocessableEntityException(
+        '해당 이메일로는 가입할 수 없습니다.',
+      );
     }
 
     const user = new UserEntity();
@@ -88,7 +90,10 @@ export class UsersService {
   }
 
   // QueryRunner를 활용해 Transaction을 제어 - try/catch 구문 활용
-  private async saveUserUsingQueryRunnerTryCatch(createUserDto: CreateUserDto, signupVerifyToken: string) {
+  private async saveUserUsingQueryRunnerTryCatch(
+    createUserDto: CreateUserDto,
+    signupVerifyToken: string,
+  ) {
     const queryRunner = this.dataSource.createQueryRunner();
 
     await queryRunner.connect();
@@ -113,16 +118,19 @@ export class UsersService {
   }
 
   // QueryRunner를 활용해 Transaction을 제어 - transaction을 직접 제어
-  private async saveUserUsingQueryRunnerDirect(createUserDto: CreateUserDto, signupVerifyToken: string) {
-    await this.dataSource.transaction(async manager => {
-        const user = new UserEntity();
-        user.uid = ulid();
-        user.name = createUserDto.name;
-        user.email = createUserDto.email;
-        user.password = createUserDto.password;
-        user.signupVerifyToken = signupVerifyToken;
+  private async saveUserUsingQueryRunnerDirect(
+    createUserDto: CreateUserDto,
+    signupVerifyToken: string,
+  ) {
+    await this.dataSource.transaction(async (manager) => {
+      const user = new UserEntity();
+      user.uid = ulid();
+      user.name = createUserDto.name;
+      user.email = createUserDto.email;
+      user.password = createUserDto.password;
+      user.signupVerifyToken = signupVerifyToken;
 
-        await manager.save(user);
+      await manager.save(user);
     });
   }
 }
