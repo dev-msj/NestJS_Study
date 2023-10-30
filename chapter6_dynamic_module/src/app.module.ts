@@ -16,9 +16,10 @@ import { validationSchema } from './config/validationSchema';
   imports: [
     ConfigModule.forRoot({
       /**
-       * dotenv 파일이 dist로 out될 수 있도록
+       * dotenv 파일이 빌드시 dist 경로로 out될 수 있도록
        * nest-cli.json 파일에서 asset 옵션 추가했다.
-       * 그래서 런타임 때 config/env 딕셔너리에서 직접 가져올 수 있게 되었다.
+       * 그래서 런타임 때 config/env 경로에서
+       * env 파일을 가져올 수 있게 되었다.
        */
       // envFilePath: process.env.NODE_ENV === 'production' ? '.production.env' : process.env.NODE_ENV === 'stage' ? '.stage.env' : '.development.env',
       envFilePath: [`${__dirname}/config/env/.${process.env.NODE_ENV}.env`],
