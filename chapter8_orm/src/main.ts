@@ -1,8 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { ConfigService } from './config/config.service';
 import * as fs from 'fs';
+import { OrmConfigService } from './config/orm-config.service';
 
 async function bootstrap() {
   /**
@@ -24,7 +24,7 @@ async function bootstrap() {
 }
 
 async function makeOrmConfig() {
-  const configService = new ConfigService(process.env);
+  const configService = new OrmConfigService(process.env);
   const typeOrmConfig = configService.getTypeOrmConfig();
 
   if (fs.existsSync('ormconfig.json')) {
