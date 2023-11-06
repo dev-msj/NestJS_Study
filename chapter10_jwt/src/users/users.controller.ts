@@ -19,12 +19,15 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { User } from 'src/custom_decorator/user.decorator';
 import { UserData } from 'src/custom_decorator/user-data.decorator';
 import { AuthorizedUserDto } from './dto/authorized-user.dto';
+import { SetMetadata } from '@nestjs/common';
+import { Roles } from 'src/custom_decorator/roles.decorator';
 
 interface User {
   name: string;
   email: string;
 }
 
+@Roles('user')
 @Controller('users')
 export class UsersController {
   constructor(
@@ -32,6 +35,19 @@ export class UsersController {
     private authService: AuthService,
   ) {}
 
+  /**
+   * SetMetadata는 메타데이터를 키와 값으로 받아
+   * CustomDecorator 타입으로 돌려주는 데코레이터다.
+   * 이 것을 통해 클래스나 라우트 핸들러에 필요한 정보를
+   * 정의해줄 수 있다.
+   * 아래의 경우 라우트 핸들러의 접근권한이 admin이라는 것을
+   * SetMetadata를 통해 알려주고 있다.
+   * 하지만 이렇게 직접 메타데이터에 대해 정의해주는 것보다
+   * 커스텀 데커게이터로 한번 더 감싸서 그 의미를
+   * 명확하게 드러내주는 것이 더 좋다.
+   */
+  // @SetMetadata('roles', ['admin']) // 직접 메타데이터를 정의
+  @Roles('admin') // 커스텀 데코레이터로 감싸서 의미를 더 명확하게 드러냄
   @Post()
   async create(
     @Body(ValidationPipe) createUserDto: CreateUserDto,
