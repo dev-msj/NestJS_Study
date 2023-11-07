@@ -1,1 +1,1 @@
-exception 처리
+nest가 제공하는 exception에 대해 알아보자.
