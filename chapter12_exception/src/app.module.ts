@@ -17,11 +17,12 @@ import { UsersController } from './users/users.controller';
 import { typeOrmConfig } from './config/typeOrmConfig.service';
 import authConfig from './config/authConfig';
 import { AppService } from './app.service';
-import { APP_FILTER, APP_GUARD } from '@nestjs/core';
+import { APP_FILTER } from '@nestjs/core';
 import { RolesGuard } from './auth/roles.guard';
 import { LoggerModule } from './logger/logger.module';
 import { HttpExceptionFilter } from './filter/http-exception.filter';
 import { ExceptionModule } from './exception/exception.module';
+import { RolesModule } from './auth/roles.module';
 
 @Module({
   imports: [
@@ -34,16 +35,13 @@ import { ExceptionModule } from './exception/exception.module';
     TypeOrmModule.forRootAsync(typeOrmConfig),
     UsersModule,
     LoggerModule,
+    RolesModule,
     ExceptionModule,
   ],
   controllers: [AppController],
   providers: [
     ConfigService,
     AppService,
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
-    },
     // {
     //   // 필터에 DI가 필요할 경우 커스텀 프로바이더를 활용
     //   provide: APP_FILTER,
