@@ -61,7 +61,7 @@ export class UsersService {
       where: { email: email },
     });
 
-    return user !== undefined;
+    return user !== null;
   }
 
   // transaction 없이 저장
