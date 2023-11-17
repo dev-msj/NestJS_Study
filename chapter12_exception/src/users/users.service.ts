@@ -82,7 +82,7 @@ export class UsersService {
       where: { email: email },
     });
 
-    return user !== undefined;
+    return user !== null;
   }
 
   private async sendMemberJoinEmail(email: string, signupVerifyToken: string) {

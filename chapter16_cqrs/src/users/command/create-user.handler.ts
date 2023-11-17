@@ -46,7 +46,7 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
       where: { email: email },
     });
 
-    return user !== undefined;
+    return user !== null;
   }
 
   private async save(
