@@ -4,4 +4,4 @@
 
 * NestJS의 요청 생명주기
 
-[](https://github.com/dev-msj/NestJS_Study/blob/main/request_lifecycle.jpeg)
+![request_lifecycle](https://github.com/dev-msj/NestJS_Study/assets/43961064/429ffd02-bf24-4bb0-a18e-5a64aea9b03f)
